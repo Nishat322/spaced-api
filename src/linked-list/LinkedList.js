@@ -26,37 +26,6 @@ class LinkedList {
         }
     }
 
-    insertAfter(key, itemToInsert) {
-        let tempNode = this.head
-        while (tempNode !== null && tempNode.value !== key) {
-            tempNode = tempNode.next
-        }
-        if (tempNode !== null) {
-            tempNode.next = new _Node(itemToInsert, tempNode.next)
-        }
-    }
-
-    insertBefore(key, itemToInsert) {
-        if (this.head == null) {
-            return
-        }
-        if (this.head.value == key) {
-            this.insertFirst(itemToInsert)
-            return
-        }
-        let prevNode = null
-        let currNode = this.head
-        while (currNode !== null && currNode.value !== key) {
-            prevNode = currNode
-            currNode = currNode.next
-        }
-        if (currNode === null) {
-            console.log("Node not found")
-            return
-        }
-        prevNode.next = new _Node(itemToInsert, currNode)
-    }
-
     insertAt(nthPosition, itemToInsert) {
         if (nthPosition < 0) {
             throw new Error("Position error")
@@ -79,42 +48,6 @@ class LinkedList {
       return node
     }
 
-    remove(item) {
-        if (!this.head) {
-            return null
-        }
-        if (this.head === item) {
-            this.head = this.head.next
-            return
-        }
-        let currNode = this.head
-        let previousNode = this.head
-        while (currNode !== null && currNode.value !== item) {
-            previousNode = currNode
-            currNode = currNode.next
-        }
-        if (currNode === null) {
-            console.log("Item not found")
-            return
-        }
-        previousNode.next = currNode.next
-    }
-
-    find(item) {
-        let currNode = this.head
-        if (!this.head) {
-            return null
-        }
-        while (currNode.value !== item) {
-            if (currNode.next === null) {
-            return null
-            } else {
-            currNode = currNode.next
-            }
-        }
-        return currNode
-    }
-  
     moveHeadBy(level) {
         let head = this.head
         this.head = this.head.next
@@ -126,16 +59,6 @@ class LinkedList {
         const arr = []
         while (node) {
             arr.push(node)
-            node = node.next
-        }
-        return arr
-    }
-  
-    map(callback) {
-        let node = this.head
-        let arr = []
-        while (node) {
-            arr.push(callback(node))
             node = node.next
         }
         return arr

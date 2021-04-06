@@ -70,10 +70,10 @@ const LanguageService = {
   },
 
   nextLinkedList(db, linkedLanguage) {
-    return db.transaction(trx =>
+    return db.transaction(trans =>
       Promise.all([
         db('language')
-          .transacting(trx)
+          .transacting(trans)
           .where('id', linkedLanguage.id)
           .update({
             total_score: linkedLanguage.total_score,
@@ -82,7 +82,7 @@ const LanguageService = {
 
         ...linkedLanguage.forEach(node =>
           db('word')
-            .transacting(trx)
+            .transacting(trans)
             .where('id', node.value.id)
             .update({
               memory_value: node.value.memory_value,

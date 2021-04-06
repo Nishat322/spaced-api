@@ -72,41 +72,41 @@ languageRouter
       }
 
       const words = await LanguageService.getLanguageWords(knexInstance , req.language.id)
-      const wordList = LanguageService.fillWordList(knexInstance , req.language, words)
+      const wordsList = LanguageService.fillWordList(knexInstance , req.language, words)
       const userAnswer = req.body.guess;
-      const correctAnswer = wordList.head.value.translation;
+      const correctAnswer = wordsList.head.value.translation;
       if (userAnswer.toLowerCase().split(' ').join('') === correctAnswer.toLowerCase().split(' ').join('')) {
-        wordList.head.value.correct_count++
-        wordList.head.value.memory_value =
-          wordList.head.value.memory_value * 2 >= wordList.listNodes().length
-            ? wordList.listNodes().length - 1
-            : wordList.head.value.memory_value * 2;
-        wordList.total_score += 1
-        wordList.moveHeadBy(wordList.head.value.memory_value);
-        LanguageService.nextLinkedList(knexInstance, wordList)
+        wordsList.head.value.correct_count++
+        wordsList.head.value.memory_value =
+          wordsList.head.value.memory_value * 2 >= wordsList.listNodes().length
+            ? wordsList.listNodes().length - 1
+            : wordsList.head.value.memory_value * 2;
+        wordsList.total_score += 1
+        wordsList.moveHeadBy(wordsList.head.value.memory_value);
+        LanguageService.nextLinkedList(knexInstance, wordsList)
           .then(() => {
               res.json({
-                nextWord: wordList.head.value.original,
-                wordCorrectCount: wordList.head.value.correct_count,
-                wordIncorrectCount: wordList.head.value.incorrect_count,
-                totalScore: wordList.total_score,
+                nextWord: wordsList.head.value.original,
+                wordCorrectCount: wordsList.head.value.correct_count,
+                wordIncorrectCount: wordsList.head.value.incorrect_count,
+                totalScore: wordsList.total_score,
                 answer: req.body.guess,
                 isCorrect: true,
               })
               next()
             })
       } else {
-        wordList.head.value.incorrect_count++;
-        wordList.head.value.memory_value = 1;
-        const rightAnswer = wordList.head.value.translation;
-        wordList.moveHeadBy(wordList.head.value.memory_value);
-        LanguageService.nextLinkedList(knexInstance, wordList)
+        wordsList.head.value.incorrect_count++;
+        wordsList.head.value.memory_value = 1;
+        const rightAnswer = wordsList.head.value.translation;
+        wordsList.moveHeadBy(wordsList.head.value.memory_value);
+        LanguageService.nextLinkedList(knexInstance, wordsList)
           .then(() => {
             res.json({
-              nextWord: wordList.head.value.original,
-              wordCorrectCount: wordList.head.value.correct_count,
-              wordIncorrectCount: wordList.head.value.incorrect_count,
-              totalScore: wordList.total_score,
+              nextWord: wordsList.head.value.original,
+              wordCorrectCount: wordsList.head.value.correct_count,
+              wordIncorrectCount: wordsList.head.value.incorrect_count,
+              totalScore: wordsList.total_score,
               answer: rightAnswer,
               isCorrect: false,
             })
