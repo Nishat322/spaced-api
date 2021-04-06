@@ -45,8 +45,19 @@ languageRouter
 
 languageRouter
   .get('/head', async (req, res, next) => {
-    // implement me
-    res.send('implement me!')
+    const knexInstance = req.app.get('db')
+    const { head } = req.language
+    try {
+      const nextWord = await LanguageService.getNextWord(knexInstance, head)
+        res.json({
+          nextWord: nextWord.original,
+          wordCorrectCount: nextWord.correct_count,
+          wordIncorrectCount: nextWord.incorrect_count,
+          totalScore: req.language.total_score,
+        })
+    } catch (error) {
+        next(error)
+    }
   })
 
 languageRouter
